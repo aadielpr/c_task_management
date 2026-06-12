@@ -1,0 +1,47 @@
+# Build outputs
+build/
+bin/
+obj/
+out/
+debug/
+release/
+
+# Compiled objects and libraries
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+
+# Executables
+*.exe
+*.out
+*.app
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+
+# Make
+*.d
+
+# Debug and profiling
+*.gcda
+*.gcno
+*.gcov
+gmon.out
+core
+core.*
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
