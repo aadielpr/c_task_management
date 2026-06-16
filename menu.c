@@ -24,7 +24,6 @@ void print_menu(Menu menu[], int len) {
 int select_menu() {
     int select;
     if (!prompt_int("Choose an option: ", 10, &select)) {
-        fprintf(stderr, "Invalid option. Please choose a number from 1 to 7.\n\n");
         return 0;
     }
 
