@@ -23,7 +23,7 @@ void print_menu(Menu menu[], int len) {
 
 int select_menu(void) {
     int select;
-    if (!prompt_int("Choose an option: ", 10, &select)) {
+    if (!prompt_int("Choose an option: ", &select)) {
         return 0;
     }
 

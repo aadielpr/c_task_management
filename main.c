@@ -40,16 +40,19 @@ int main(void) {
 
         if (select == 1) {
             // TODO: create this into a function
+            printf("\n===== TASKS =====\n");
             if (task_count == 0) {
-                printf("No tasks found. Add a task first.\n\n");
-                continue;
+                printf("Empty.\n");
+                goto end_border;
             }
 
-            printf("===== TASKS =====\n\n");
             for (size_t i = 0; i < task_count; i++) {
                 Task task = tasks[i];
-                printf("%d [%c] %s\n", task.ID, task.done ? 'x' : ' ', task.title);
+                printf("%d [%c] %s\n", task.ID, task.done ? 'X' : ' ', task.title);
             }
+            
+        end_border:
+            printf("\n===== TASKS =====\n");
         } else if (select == 2) {
             // TODO: create this into a function
             while (1) {
@@ -78,9 +81,109 @@ int main(void) {
                 tasks = temp;
                 tasks[task_count++] = task;
 
-                printf("Task added successfully.\n");
+                printf("\nTask added successfully.\n");
 
-                printf("%d. [%c] %s\n", task.ID, task.done ? 'x' : ' ', task.title);
+                printf("%d. [ ] %s\n", task.ID, task.title);
+                break;
+            }
+        } else if (select == 3) {
+            int ID;
+            if (!prompt_int("Enter task number to complete: ", &ID)) {
+                fprintf(stderr, "Invalid input.\n");
+                continue;
+            }
+
+            // TODO: findByID function
+            int found = 0;
+            for (size_t i = 0; i < task_count; i++) {
+                if (tasks[i].ID == ID) {
+                    tasks[i].done = 1;
+                    found = 1;
+                    printf("\nTask marked as completed.\n");
+                    break;
+                }
+            }
+
+            if (!found) {
+                fprintf(stderr, "\nTask not found.\n");
+            }
+
+        } else if (select == 4) {
+            while(1) {
+                int ID;
+                if (!prompt_int("Enter task number to edit: ", &ID)) {
+                    fprintf(stderr, "Invalid input.\n");
+                    continue;
+                }
+
+                // TODO: findByID function
+                Task *task = NULL;
+                for (size_t i = 0; i < task_count; i++) {
+                    if (tasks[i].ID == ID) {
+                        task = &tasks[i];
+                        break;
+                    }
+                }
+
+                if (task == NULL) {
+                    fprintf(stderr, "\nTask not found.\n");
+                    break;
+                }
+
+                printf("\nCurrent title: %s\n", task->title);
+                if (!prompt_str("Enter new title: ", task->title, sizeof (task->title))) {
+                    fprintf(stderr, "Invalid title format.\n");
+                    continue;
+                }
+                printf("\nTask updated successfully.\n");
+                break;
+            }
+        } else if (select == 5) {
+            while(1) {
+                // TODO: i think, just start loop from deleted index then left shift all the item ?
+                int delete_ID;
+                if (!prompt_int("Enter task number to delete: ", &delete_ID)) {
+                    fprintf(stderr, "Invalid input.\n");
+                    continue;
+                }
+
+                // TODO: findByID function
+                Task *task = NULL;
+                for (size_t i = 0; i < task_count; i++) {
+                    if (tasks[i].ID == delete_ID) {
+                        task = &tasks[i];
+                        break;
+                    }
+                }
+
+                if (task == NULL) {
+                    fprintf(stderr, "\nTask not found.\n");
+                    break;
+                }
+
+                int next_size = task_count - 1;
+                Task *temp = NULL;
+                if (next_size > 0) {
+                    temp = malloc(next_size * sizeof (Task));
+                    if (temp == NULL) {
+                        fprintf(stderr, "Out of memory.\n");
+                        exit(1);
+                    }
+                }
+
+                ID = 1;
+                for (size_t i = 0; i < task_count; i++) {
+                    if (tasks[i].ID != delete_ID) {
+                        Task task = { .ID = ID, .done = tasks[i].done };
+                        strcpy(task.title, tasks[i].title);
+                        temp[ID-1] = task;
+                        ID++;
+                    }
+                }
+
+                free(tasks);
+                tasks = temp;
+                task_count = next_size;
                 break;
             }
         }
